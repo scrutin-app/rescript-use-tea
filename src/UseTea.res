@@ -1,22 +1,20 @@
-type teaState<'state, 'effect> = { state: 'state, effects: array<'effect> }
-
 type subAction<'action,'effect> =
   | DomainAction('action)
   | RemoveEffects
 
-let useTea = (reducer, initialState) => {
+let useTea = (reducer : (('state, 'action) => ('state, 'effect)), initialState: 'state) => {
 
-  let teaReducer = ({state, effects}, action) => {
+  let teaReducer = ((state, effects), action) => {
     switch action {
-      | RemoveEffects => { state, effects: [] }
+      | RemoveEffects => ( state, [] )
       | DomainAction(action) => {
-        let result = reducer(state, action)
-        { state: result.state, effects: effects->Belt.Array.concat(result.effects) }
+        let (nextState, nextEffects) = reducer(state, action)
+        ( nextState, effects->Belt.Array.concat(nextEffects) )
       }
     }
   }
 
-  let ({state, effects}, dispatch) = React.useReducer(teaReducer, initialState)
+  let ((state, effects), dispatch) = React.useReducer(teaReducer, (initialState, []))
 
   let subDispatch = (action) => dispatch(DomainAction(action))
 
@@ -26,5 +24,5 @@ let useTea = (reducer, initialState) => {
     None
   }, [effects]);
 
-  [state, subDispatch]
+  (state, subDispatch)
 }

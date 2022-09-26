@@ -6,23 +6,26 @@ import * as Belt_Array from "rescript/lib/es6/belt_Array.js";
 
 function useTea(reducer, initialState) {
   var teaReducer = function (param, action) {
-    var state = param.state;
+    var state = param[0];
     if (!action) {
-      return {
-              state: state,
-              effects: []
-            };
+      return [
+              state,
+              []
+            ];
     }
-    var result = Curry._2(reducer, state, action._0);
-    return {
-            state: result.state,
-            effects: Belt_Array.concat(param.effects, result.effects)
-          };
+    var match = Curry._2(reducer, state, action._0);
+    return [
+            match[0],
+            Belt_Array.concat(param[1], match[1])
+          ];
   };
-  var match = React.useReducer(teaReducer, initialState);
+  var match = React.useReducer(teaReducer, [
+        initialState,
+        []
+      ]);
   var dispatch = match[1];
   var match$1 = match[0];
-  var effects = match$1.effects;
+  var effects = match$1[1];
   var subDispatch = function (action) {
     Curry._1(dispatch, /* DomainAction */{
           _0: action
@@ -39,7 +42,7 @@ function useTea(reducer, initialState) {
           Curry._1(dispatch, /* RemoveEffects */0);
         }), [effects]);
   return [
-          match$1.state,
+          match$1[0],
           subDispatch
         ];
 }
