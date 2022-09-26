@@ -1,0 +1,16 @@
+{
+  "name": "rescript-use-tea",
+  "version": "0.1.0",
+  "sources": {
+    "dir" : "src",
+    "subdirs" : true
+  },
+  "package-specs": {
+    "module": "es6",
+    "in-source": true
+  },
+  "bs-dependencies": [
+    "@rescript/react"
+  ],
+  "suffix": ".bs.js"
+}
