@@ -4,42 +4,51 @@ import * as Curry from "rescript/lib/es6/curry.js";
 import * as React from "react";
 import * as Belt_Array from "rescript/lib/es6/belt_Array.js";
 
-function useTea(reducer, initialState) {
-  var teaReducer = function (param, action) {
-    var state = param[0];
-    if (!action) {
-      return [
-              state,
-              []
-            ];
-    }
-    var match = Curry._2(reducer, state, action._0);
+function makeTeaReducer(reducer, param, action) {
+  var state = param[0];
+  if (!action) {
     return [
-            match[0],
-            Belt_Array.concat(param[1], match[1])
+            state,
+            []
           ];
-  };
-  var match = React.useReducer(teaReducer, [
+  }
+  var match = Curry._2(reducer, state, action._0);
+  return [
+          match[0],
+          Belt_Array.concat(param[1], match[1])
+        ];
+}
+
+function useTea(reducer, initialState) {
+  var teaReducer = React.useCallback((function (param) {
+          return function (param$1) {
+            return makeTeaReducer(reducer, param, param$1);
+          };
+        }), [reducer]);
+  var match = React.useReducer(Curry.__2(teaReducer), [
         initialState,
         []
       ]);
   var dispatch = match[1];
   var match$1 = match[0];
   var effects = match$1[1];
-  var subDispatch = function (action) {
-    Curry._1(dispatch, /* DomainAction */{
-          _0: action
-        });
-  };
+  var subDispatch = React.useCallback((function (action) {
+          Curry._1(dispatch, /* DomainAction */{
+                _0: action
+              });
+        }), [dispatch]);
   React.useEffect((function () {
-          Belt_Array.forEach(effects, (function (fx) {
-                  Curry._1(fx, (function (action) {
-                          Curry._1(dispatch, /* DomainAction */{
-                                _0: action
-                              });
-                        }));
-                }));
-          Curry._1(dispatch, /* RemoveEffects */0);
+          if (effects.length !== 0) {
+            Curry._1(dispatch, /* RemoveEffects */0);
+            Belt_Array.forEach(effects, (function (fx) {
+                    Curry._1(fx, (function (action) {
+                            Curry._1(dispatch, /* DomainAction */{
+                                  _0: action
+                                });
+                          }));
+                  }));
+          }
+          
         }), [effects]);
   return [
           match$1[0],
@@ -48,6 +57,7 @@ function useTea(reducer, initialState) {
 }
 
 export {
+  makeTeaReducer ,
   useTea ,
 }
 /* react Not a pure module */
