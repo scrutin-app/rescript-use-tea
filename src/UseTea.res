@@ -14,6 +14,7 @@ let makeTeaReducer = (reducer) => {
   }
 }
 
+// TODO: rename state to model, and action to msg
 let useTea = (reducer : (('state, 'action) => ('state, 'effect)), initialState: 'state) => {
 
   let teaReducer = React.useCallback1(makeTeaReducer(reducer), [reducer])
