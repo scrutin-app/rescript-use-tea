@@ -37,19 +37,16 @@ function useTea(reducer, initialState) {
                 _0: action
               });
         }), [dispatch]);
-  React.useEffect((function () {
-          if (effects.length !== 0) {
-            Curry._1(dispatch, /* RemoveEffects */0);
-            Belt_Array.forEach(effects, (function (fx) {
-                    Curry._1(fx, (function (action) {
-                            Curry._1(dispatch, /* DomainAction */{
-                                  _0: action
-                                });
-                          }));
+  if (effects.length !== 0) {
+    Curry._1(dispatch, /* RemoveEffects */0);
+    Belt_Array.forEach(effects, (function (fx) {
+            Curry._1(fx, (function (action) {
+                    Curry._1(dispatch, /* DomainAction */{
+                          _0: action
+                        });
                   }));
-          }
-          
-        }), [effects]);
+          }));
+  }
   return [
           match$1[0],
           subDispatch
