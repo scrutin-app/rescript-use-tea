@@ -1,7 +1,7 @@
 {
   "name": "rescript-use-tea",
   "version": "0.1.0",
-  "description": "State management using The Elm Architecture (TEA)",
+  "description": "State management using TEA (The Elm Architecture)",
   "main": "src/Index.js",
   "scripts": {
     "build": "rescript",
