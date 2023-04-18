@@ -1,6 +1,6 @@
 {
   "name": "rescript-use-tea",
-  "version": "0.1.1",
+  "version": "0.1.0",
   "description": "State management using TEA (The Elm Architecture)",
   "main": "src/Index.js",
   "scripts": {
@@ -14,10 +14,12 @@
   "author": "Maxime Lalisse",
   "license": "MIT",
   "devDependencies": {
-    "rescript": "^10.0.1",
-    "@rescript/react": "^0.10.3"
+    "rescript": "^10.0.1"
   },
   "peerDependencies": {
     "react": "*"
+  },
+  "dependencies": {
+    "@rescript/react": "^0.10.3"
   }
 }
